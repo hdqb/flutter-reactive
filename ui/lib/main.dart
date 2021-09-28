@@ -47,14 +47,12 @@ class _MyAppState extends State<MyApp> {
         title: 'Flutter Demo Home Page',
         state: mainPage,
         user: User,
-
       ),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-
   MyHomePage({Key key, this.title, this.state, this.user}) : super(key: key);
   final String title;
   final S.MainPage state;
@@ -69,108 +67,111 @@ class _MyHomePageState extends State<MyHomePage> {
 
   ScrollController _controller = ScrollController();
 
-   String message ;
+  String message;
 
-
-  _onStartScroll(ScrollMetrics metrics)  async => setState(() {
+  _onStartScroll(ScrollMetrics metrics)  => setState(() {
         message = "Scroll Start";
       });
 
-  _onUpdateScroll(ScrollMetrics metrics) async => setState(() {
+  _onUpdateScroll(ScrollMetrics metrics)  => setState(() {
         message = "Scroll Update";
       });
 
-  _onEndScroll(ScrollMetrics metrics) async => setState(() {
+  _onEndScroll(ScrollMetrics metrics)  => setState(() {
         message = "Scroll End";
       });
 
   @override
-  Widget build(BuildContext context) => NotificationListener<ScrollNotification>(
-        onNotification: (ScrollNotification scrollNotification)   {
-          // print(scrollNotification);
-          if (scrollNotification is ScrollStartNotification) {
-            message = "Scroll Start";
-            // ActionFactory.createMainPageButtonClick().doAction();
-             // _onStartScroll(scrollNotification.metrics);
-            ActionFactory.createMainPageButtonClick(message).doAction();
+  Widget build(BuildContext context) =>
+      NotificationListener<ScrollNotification>(
+          onNotification: (ScrollNotification scrollNotification) {
+            // print(scrollNotification);
+            if (scrollNotification is ScrollStartNotification) {
+              message = "Scroll Start";
+              // ActionFactory.createMainPageButtonClick().doAction();
+              // _onStartScroll(scrollNotification.metrics);
+              // ActionFactory.createMainPageButtonClick(message).doAction();
+              _onStartScroll(scrollNotification.metrics);
 
-          } else if (scrollNotification is ScrollUpdateNotification) {
-            message = "Scroll Update";
-            //  _onUpdateScroll(scrollNotification.metrics);
-            ActionFactory.createMainPageButtonClick(message).doAction();
-          } else if (scrollNotification is ScrollEndNotification) {
-            message = "Scroll End";
-            //  _onEndScroll(scrollNotification.metrics);
-            ActionFactory.createMainPageButtonClick(message).doAction();
-          }
-          return false;
-        },
-        child: Scaffold(
-          backgroundColor: Colors.grey.withOpacity(0.5),
-          body: CustomScrollView(
-            controller: _controller,
-            slivers: [
-              TransitionAppBar(
-                // _scrollNotification,
-                scrollNotification: widget.state.text.count,
-                controller: _controller,
-                extent: 250,
-                avatar: Text("Rancho"),
-                title: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
-                  decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                  child: Row(children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                      child: Icon(Icons.search),
-                    ),
-                    Expanded(
-                      child: TextFormField(
-                        keyboardType: TextInputType.text,
-                        textInputAction: TextInputAction.done,
-                        cursorColor: Colors.black,
-                        autofocus: false,
-                        // style: TextField_Style,
-                        decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.transparent,
-                            contentPadding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            hintText: "Search",
-                            border: InputBorder.none,
-                            disabledBorder: OutlineInputBorder(
-                              borderSide:
-                                  new BorderSide(color: Colors.transparent),
-                              borderRadius: new BorderRadius.circular(2),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderSide:
-                                  new BorderSide(color: Colors.transparent),
-                              borderRadius: new BorderRadius.circular(2),
-                            )),
+            } else if (scrollNotification is ScrollUpdateNotification) {
+              message = "Scroll Update";
+              _onUpdateScroll(scrollNotification.metrics);
+              //  _onUpdateScroll(scrollNotification.metrics);
+              // ActionFactory.createMainPageButtonClick(message).doAction();
+            } else if (scrollNotification is ScrollEndNotification) {
+              message = "Scroll End";
+              _onEndScroll(scrollNotification.metrics);
+              //  _onEndScroll(scrollNotification.metrics);
+              // ActionFactory.createMainPageButtonClick(message).doAction();
+            }
+            return true;
+          },
+          child: Scaffold(
+            backgroundColor: Colors.grey.withOpacity(0.5),
+            body: CustomScrollView(
+              controller: _controller,
+              slivers: [
+                TransitionAppBar(
+                  // _scrollNotification,
+                  scrollNotification: message,
+                  controller: _controller,
+                  extent: 250,
+                  avatar: Text("Rancho"),
+                  title: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
+                    child: Row(children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
+                        child: Icon(Icons.search),
                       ),
-                    )
-                  ]),
+                      Expanded(
+                        child: TextFormField(
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          cursorColor: Colors.black,
+                          autofocus: false,
+                          // style: TextField_Style,
+                          decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.transparent,
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              hintText: "Search",
+                              border: InputBorder.none,
+                              disabledBorder: OutlineInputBorder(
+                                borderSide:
+                                    new BorderSide(color: Colors.transparent),
+                                borderRadius: new BorderRadius.circular(2),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                    new BorderSide(color: Colors.transparent),
+                                borderRadius: new BorderRadius.circular(2),
+                              )),
+                        ),
+                      )
+                    ]),
+                  ),
                 ),
-              ),
-              SliverList(
-                  delegate: SliverChildBuilderDelegate((context, index) {
-                return Container(
-                    color: Colors.white.withOpacity(1.0),
-                    child: ListTile(
-                      title: Text("${index}  ${widget.state.text.count}  "),
-                    ));
-              }, childCount: 25))
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: _incrementCounter,
-            tooltip: 'Increment',
-            child: Icon(Icons.add),
-          ),
-        ));
+                SliverList(
+                    delegate: SliverChildBuilderDelegate((context, index) {
+                  return Container(
+                      color: Colors.white.withOpacity(1.0),
+                      child: ListTile(
+                        title: Text("${index}  ${widget.state.text.count}  "),
+                      ));
+                }, childCount: 25))
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: _incrementCounter,
+              tooltip: 'Increment',
+              child: Icon(Icons.add),
+            ),
+          ));
 
   void _incrementCounter() {
     // print(ActionFactory.createMainPageButtonClick("bao").do_action(data));
@@ -229,6 +230,7 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
   final double extent;
   final ScrollController controller;
   String scrollNotification;
+  String scroll_Notification;
 
   _TransitionAppBarDelegate({
     this.controller,
@@ -237,9 +239,22 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
     this.extent = 250,
     this.scrollNotification,
   })  : assert(avatar != null),
-        assert(extent == null || extent >= 130),
+        assert(extent == null || extent >= 200),
         assert(title != null);
 
+
+  // Future getExpensesByFundId(int fundId) async {
+  //   Database db = await database;
+  //
+  //   List<Expense> expenseList = List();
+  //
+  //   return db.query(expTable,where: '$expTable.$expFundId = $fundId')
+  //       .then((List<Map<String,dynamic>> expList){
+  //     expList.forEach((Map<String, dynamic> expMap){
+  //       expenseList.add(Expense.fromMap(expMap));
+  //     });
+  //   });
+  // }
   @override
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
@@ -266,39 +281,55 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
     //   }
     // }
     // print(ScrollUpdateNotification);
-   var states = 2;
-    if (scrollNotification == "Scroll End" &&
-        scrollNotification != "Scroll Update" &&
-        scrollNotification != "Scroll Start" && shrinkOffset > 0 &&
-          shrinkOffset <= minExtent &&
-        states == 2
-          ) {
-        states = 1;
-        controller.animateTo(0,
-            curve: Curves.linear, duration: Duration(milliseconds: 100));
-        // shrinkOffset = 250;
-      }else
+    if (scroll_Notification != "scrollOnUpdate" &&
+        scroll_Notification != "scrollUpdateDone") {
+      scroll_Notification = ("scrollUpdateDone");
+    }
+    // else if (scrollNotification != "scrollOnUpdate" &&
+    //     scrollNotification != "scrollUpdateDone") {
+    //   ActionFactory.createMainPageButtonClick("scrollUpdateDone").doAction();
+    // }
 
-    if (scrollNotification == "Scroll End" &&
+    if (scrollNotification == "Scroll End" && controller.offset < minExtent &&
+        controller.offset > kToolbarHeight &&
+        scroll_Notification == "scrollUpdateDone" &&
+        scroll_Notification != "scrollOnUpdate") {
+      try {
+        ActionFactory.createMainPageButtonClick("scrollOnUpdate").doAction();
+        controller
+            .animateTo(minExtent,
+                curve: Curves.linear, duration: Duration(milliseconds: 1))
+            .then((v) =>
+                ActionFactory.createMainPageButtonClick("scrollUpdateDone")
+                    .doAction());
+      } catch (e) {
+        print(e);
+      }
 
-        scrollNotification != "Scroll Update" &&
-        scrollNotification != "Scroll Start" &&
-        shrinkOffset >= minExtent &&
-          shrinkOffset <= extent &&
-        states == 2
-          ) {
-        states = 1;
-        controller.animateTo(extent,
-            curve: Curves.linear, duration: Duration(milliseconds: 100));
-      }else  if(
-        scrollNotification != "Scroll End" && states == 0
-    ) {
-       states = 0;
-      controller.animateTo(0,
-          curve: Curves.linear, duration: Duration(milliseconds: 100));
+      // ActionFactory.createMainPageButtonClick("1name").doAction();
+      // shrinkOffset = 250;
+    }else
+
+    if (scrollNotification == "Scroll End" && controller.offset > 0 &&
+        controller.offset < kToolbarHeight &&
+        scroll_Notification == "scrollUpdateDone" &&
+        scroll_Notification != "scrollOnUpdate") {
+      try {
+        ActionFactory.createMainPageButtonClick("scrollOnUpdate").doAction();
+        controller
+            .animateTo(0,
+                curve: Curves.linear, duration: Duration(milliseconds: 1))
+            .then((v) =>
+                ActionFactory.createMainPageButtonClick("scrollUpdateDone")
+                    .doAction());
+      } catch (e) {
+        print(e);
+      }
+
+      // ActionFactory.createMainPageButtonClick("1name").doAction();
     }
 
-print(states);
+    print("${controller.offset}, $scrollNotification");
     // print("ScrollNotification : $ScrollNotification ,controller : ${controller.offset} , shrinkOffset: $shrinkOffset, states: $states");
 
     double tempVal = 34 * maxExtent / 100;
