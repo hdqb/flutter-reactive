@@ -1,0 +1,9 @@
+[workspace]
+members = [
+  "ipwf",
+  "application",
+  "domain",
+  "presentation",
+  "state-action",
+  "data",
+]

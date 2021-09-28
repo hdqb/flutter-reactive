@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - ipwf (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - ipwf (from `.symlinks/plugins/ipwf/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  ipwf:
+    :path: ".symlinks/plugins/ipwf/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  ipwf: 8a1da929cd71bdec77d7deef0bce4325c8d226c0
+
+PODFILE CHECKSUM: 3f879b508a12b08b3824aa7fe2c1ff84e3c9d9ca
+
+COCOAPODS: 1.11.0
