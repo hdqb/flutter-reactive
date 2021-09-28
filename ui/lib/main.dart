@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:ipwf/ActionFactory.dart';
-import 'package:ipwf/ffi.dart';
 import 'package:ipwf/ipwf.dart';
 import 'package:ipwf/model/states_states_generated.dart' as S;
 
@@ -69,15 +68,15 @@ class _MyHomePageState extends State<MyHomePage> {
 
   String message;
 
-  _onStartScroll(ScrollMetrics metrics)  => setState(() {
+  _onStartScroll(ScrollMetrics metrics) => setState(() {
         message = "Scroll Start";
       });
 
-  _onUpdateScroll(ScrollMetrics metrics)  => setState(() {
+  _onUpdateScroll(ScrollMetrics metrics) => setState(() {
         message = "Scroll Update";
       });
 
-  _onEndScroll(ScrollMetrics metrics)  => setState(() {
+  _onEndScroll(ScrollMetrics metrics) => setState(() {
         message = "Scroll End";
       });
 
@@ -92,7 +91,6 @@ class _MyHomePageState extends State<MyHomePage> {
               // _onStartScroll(scrollNotification.metrics);
               // ActionFactory.createMainPageButtonClick(message).doAction();
               _onStartScroll(scrollNotification.metrics);
-
             } else if (scrollNotification is ScrollUpdateNotification) {
               message = "Scroll Update";
               _onUpdateScroll(scrollNotification.metrics);
@@ -220,7 +218,7 @@ class TransitionAppBar extends StatelessWidget {
 
 class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
   final _avatarMarginTween = EdgeInsetsTween(
-      begin: EdgeInsets.only(bottom: 70, left: 30),
+      begin: EdgeInsets.only(bottom: 10, left: 30),
       end: EdgeInsets.only(left: 0.0, top: 30.0));
   final _avatarAlignTween =
       AlignmentTween(begin: Alignment.bottomLeft, end: Alignment.topCenter);
@@ -241,7 +239,6 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
   })  : assert(avatar != null),
         assert(extent == null || extent >= 200),
         assert(title != null);
-
 
   // Future getExpensesByFundId(int fundId) async {
   //   Database db = await database;
@@ -290,7 +287,8 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
     //   ActionFactory.createMainPageButtonClick("scrollUpdateDone").doAction();
     // }
 
-    if (scrollNotification == "Scroll End" && controller.offset < minExtent &&
+    if (scrollNotification == "Scroll End" &&
+        controller.offset < minExtent &&
         controller.offset > kToolbarHeight &&
         scroll_Notification == "scrollUpdateDone" &&
         scroll_Notification != "scrollOnUpdate") {
@@ -298,7 +296,7 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
         ActionFactory.createMainPageButtonClick("scrollOnUpdate").doAction();
         controller
             .animateTo(minExtent,
-                curve: Curves.linear, duration: Duration(milliseconds: 1))
+                curve: Curves.linear, duration: Duration(milliseconds: 100))
             .then((v) =>
                 ActionFactory.createMainPageButtonClick("scrollUpdateDone")
                     .doAction());
@@ -308,9 +306,8 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
 
       // ActionFactory.createMainPageButtonClick("1name").doAction();
       // shrinkOffset = 250;
-    }else
-
-    if (scrollNotification == "Scroll End" && controller.offset > 0 &&
+    } else if (scrollNotification == "Scroll End" &&
+        controller.offset > 0 &&
         controller.offset < kToolbarHeight &&
         scroll_Notification == "scrollUpdateDone" &&
         scroll_Notification != "scrollOnUpdate") {
@@ -318,7 +315,7 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
         ActionFactory.createMainPageButtonClick("scrollOnUpdate").doAction();
         controller
             .animateTo(0,
-                curve: Curves.linear, duration: Duration(milliseconds: 1))
+                curve: Curves.linear, duration: Duration(milliseconds: 100))
             .then((v) =>
                 ActionFactory.createMainPageButtonClick("scrollUpdateDone")
                     .doAction());
@@ -362,13 +359,18 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
               child: Align(alignment: avatarAlign, child: avatar),
             ),
             Padding(
-              padding: EdgeInsetsTween(
-                      begin: EdgeInsets.only(bottom: 10, left: 0),
-                      end: EdgeInsets.only(left: 160.0, right: 80.0))
-                  .lerp(progress),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: title,
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                child: Padding(
+                  padding: EdgeInsetsTween(
+                          begin: EdgeInsets.only(top: kToolbarHeight/1.618,right: 160),
+                          end: EdgeInsets.only(right: 200.0, left: 0.0, top: kToolbarHeight/1.618))
+                      .lerp(progress),
+                  child: Align(
+                    alignment: Alignment.topLeft,
+                    child: title,
+                  ),
+                ),
               ),
             )
           ],
