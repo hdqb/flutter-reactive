@@ -7,6 +7,14 @@ import 'package:ipwf/ActionFactory.dart';
 import 'package:ipwf/ipwf.dart';
 import 'package:ipwf/model/states_states_generated.dart' as S;
 
+// /
+// / Search bar.
+// / Receive money.
+// / Transfer money,
+// / withdraw money,
+// / payment code,
+// / scan QR code
+// /
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
@@ -114,45 +122,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   scrollNotification: message,
                   controller: _controller,
                   extent: 250,
-                  avatar: Text("Rancho"),
-                  title: Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
-                    decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.all(Radius.circular(5.0))),
-                    child: Row(children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0, right: 10.0),
-                        child: Icon(Icons.search),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          keyboardType: TextInputType.text,
-                          textInputAction: TextInputAction.done,
-                          cursorColor: Colors.black,
-                          autofocus: false,
-                          // style: TextField_Style,
-                          decoration: InputDecoration(
-                              filled: true,
-                              fillColor: Colors.transparent,
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 15),
-                              hintText: "Search",
-                              border: InputBorder.none,
-                              disabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.transparent),
-                                borderRadius: new BorderRadius.circular(2),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    new BorderSide(color: Colors.transparent),
-                                borderRadius: new BorderRadius.circular(2),
-                              )),
-                        ),
-                      )
-                    ]),
+                  TbReceiveMn: Container(
+                    child: CircleButton(
+                      text: '>',
+                      onPressed: () => {},
+                    ),
                   ),
+                  TbTransferMn: Container(
+                    child: CircleButton(
+                      text: '<',
+                      onPressed: () => {},
+                    ),
+                  ),
+                  TbQrCode: Container(
+                    child: CircleButton(
+                      text: '1',
+                      onPressed: () => {},
+                    ),
+                  ),
+                  TbScanQr: Container(
+                    child: CircleButton(
+                      text: '2',
+                      onPressed: () => {},
+                    ),
+                  ),
+                  TbProfile: Container(
+                    child: CircleButton(
+                      text: '>',
+                      onPressed: () => {},
+                    ),
+                  ),
+                  TbSearchBar: CircleInput(hintText: "Search",)
                 ),
                 SliverList(
                     delegate: SliverChildBuilderDelegate((context, index) {
@@ -178,20 +178,28 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class TransitionAppBar extends StatelessWidget {
-  final Widget avatar;
-  final Widget title;
+  final Widget TbQrCode;
+  final Widget TbScanQr;
+  final Widget TbReceiveMn;
+  final Widget TbTransferMn;
+  final Widget TbProfile;
+  final Widget TbSearchBar;
   final double extent;
   final ScrollController controller;
 
   String scrollNotification;
 
   TransitionAppBar({
-    this.avatar,
-    this.title,
+    Key key,
     this.extent = 250,
     this.controller,
-    Key key,
     this.scrollNotification,
+    this.TbQrCode,
+    this.TbScanQr,
+    this.TbReceiveMn,
+    this.TbTransferMn,
+    this.TbSearchBar,
+    this.TbProfile,
   }) : super(key: key);
 
   @override
@@ -201,8 +209,12 @@ class TransitionAppBar extends StatelessWidget {
     return SliverPersistentHeader(
       pinned: true,
       delegate: _TransitionAppBarDelegate(
-        avatar: avatar,
-        title: title,
+        TbReceiveMn: TbReceiveMn,
+        TbQrCode: TbQrCode,
+        TbScanQr: TbScanQr,
+        TbProfile: TbProfile,
+        TbTransferMn: TbTransferMn,
+        TbSearchBar: TbSearchBar,
         extent: extent > 200 ? extent : 200,
         controller: controller,
         scrollNotification: scrollNotification,
@@ -223,22 +235,34 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
   final _avatarAlignTween =
       AlignmentTween(begin: Alignment.bottomLeft, end: Alignment.topCenter);
 
-  final Widget avatar;
-  final Widget title;
+  final Widget TbScanQr;
+  final Widget TbQrCode;
+  final Widget TbTransferMn;
+  final Widget TbProfile;
+  final Widget TbReceiveMn;
+  final Widget TbSearchBar;
   final double extent;
   final ScrollController controller;
   String scrollNotification;
   String scroll_Notification;
 
   _TransitionAppBarDelegate({
+    this.TbScanQr,
+    this.TbQrCode,
+    this.TbTransferMn,
+    this.TbProfile,
+    this.TbReceiveMn,
+    this.TbSearchBar,
     this.controller,
-    this.avatar,
-    this.title,
     this.extent = 250,
     this.scrollNotification,
-  })  : assert(avatar != null),
-        assert(extent == null || extent >= 200),
-        assert(title != null);
+  })  : assert(TbScanQr != null),
+        assert(TbQrCode != null),
+        assert(TbTransferMn != null),
+        assert(TbProfile != null),
+        assert(TbReceiveMn != null),
+        assert(TbSearchBar != null),
+        assert(extent == null || extent >= 200);
 
   // Future getExpensesByFundId(int fundId) async {
   //   Database db = await database;
@@ -348,27 +372,94 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
         },
         child: Stack(
           children: <Widget>[
-            AnimatedContainer(
-              duration: Duration(milliseconds: 100),
-              height: shrinkOffset,
-              constraints: BoxConstraints(maxHeight: minExtent),
-              color: Colors.redAccent,
+            // AnimatedContainer(
+            //   duration: Duration(milliseconds: 100),
+            //   height: shrinkOffset,
+            //   constraints: BoxConstraints(maxHeight: kToolbarHeight*1.618),
+            //   color: Colors.redAccent,
+            // ),
+
+            Container(color: Colors.blue[600].withOpacity(0.7),height: kToolbarHeight*1.618,),
+            SizedBox(
+              child: Padding(
+                padding: EdgeInsetsTween(
+                        begin: EdgeInsets.only(
+                            top: kToolbarHeight / 1.618, right: 160),
+                        end: EdgeInsets.only(
+                            right: 200.0, left: 0.0, top: kToolbarHeight / 1.618))
+                    .lerp(progress),
+                child: Align(alignment: avatarAlign, child: TbReceiveMn),
+              ),
             ),
-            Padding(
-              padding: avatarMargin,
-              child: Align(alignment: avatarAlign, child: avatar),
+            SizedBox(
+              child: Padding(
+                padding: EdgeInsetsTween(
+                        begin: EdgeInsets.only(
+                            top: kToolbarHeight / 1.618, right: 0,bottom: 10),
+                        end: EdgeInsets.only(
+                            right: 0.0, left: 0.0, top: kToolbarHeight / 1.618))
+                    .lerp(progress),
+                child: Align(alignment: Alignment.bottomCenter, child: TbTransferMn),
+              ),
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
+            SizedBox(
+              child: Padding(
+                padding: EdgeInsetsTween(
+                        begin: EdgeInsets.only(
+                            top: kToolbarHeight / 1.618, right: 90,bottom: 10),
+                        end: EdgeInsets.only(
+                            right: 0.0, left: 0.0, top: kToolbarHeight / 1.618))
+                    .lerp(progress),
+                child: Align(alignment: Alignment.bottomCenter, child: TbQrCode),
+              ),
+            ),
+            SizedBox(
+              child: Padding(
+                padding: EdgeInsetsTween(
+                        begin: EdgeInsets.only(
+                            top: kToolbarHeight / 1.618, left: 90, bottom: 10),
+                        end: EdgeInsets.only(
+                            right: 0.0, left: 0.0, top: kToolbarHeight / 1.618))
+                    .lerp(progress),
+                child: Align(alignment: Alignment.bottomCenter, child: TbScanQr),
+              ),
+            ),
+            Container(
+              // height: kToolbarHeight ,
+              // width: 350,
+              margin:  EdgeInsets.all(10) ,
+              child: Padding(
+                padding: EdgeInsetsTween(
+                        begin: EdgeInsets.only(
+                            top: kToolbarHeight / 1.618, right: 20 ),
+                        end: EdgeInsets.only(
+                            right: .0, left: .0, top: kToolbarHeight / 1.618))
+                    .lerp(progress),
+                child: Align(alignment: Alignment.topRight, child: TbProfile),
+              ),
+            ),
+            // Padding(
+            //   padding: EdgeInsetsTween(
+            //           begin: EdgeInsets.only(
+            //               top: kToolbarHeight / 1.618, right: 160),
+            //           end: EdgeInsets.only(
+            //               right: 200.0, left: 0.0, top: kToolbarHeight / 1.618))
+            //       .lerp(progress),
+            //   child: Align(alignment: avatarAlign, child: TbReceiveMn),
+            // ),
+            Container(
+              child: SizedBox(
+                height: 80,
                 child: Padding(
                   padding: EdgeInsetsTween(
-                          begin: EdgeInsets.only(top: kToolbarHeight/1.618,right: 160),
-                          end: EdgeInsets.only(right: 200.0, left: 0.0, top: kToolbarHeight/1.618))
+                          begin: EdgeInsets.only(
+                              top: kToolbarHeight  /1.25 , right: MediaQuery.of(context).size.width/1.618/1.618/1.618),
+                          end: EdgeInsets.only(
+                              right: MediaQuery.of(context).size.width/1.618, left: 0, top: kToolbarHeight  /1.25 ))
                       .lerp(progress),
                   child: Align(
                     alignment: Alignment.topLeft,
-                    child: title,
+                    child: TbSearchBar,
                   ),
                 ),
               ),
@@ -385,6 +476,112 @@ class _TransitionAppBarDelegate extends SliverPersistentHeaderDelegate {
 
   @override
   bool shouldRebuild(_TransitionAppBarDelegate oldDelegate) {
-    return avatar != oldDelegate.avatar || title != oldDelegate.title;
+    return TbSearchBar != oldDelegate.TbSearchBar ||
+        // TbReceiveMn != oldDelegate.TbReceiveMn ||
+        // TbProfile != oldDelegate.TbProfile ||
+        // TbQrCode != oldDelegate.TbQrCode ||
+        // TbScanQr != oldDelegate.TbScanQr ||
+        TbTransferMn != oldDelegate.TbTransferMn;
+  }
+}
+
+class CircleButtonBar extends StatelessWidget {
+  CircleButtonBar({
+    @required this.text,
+    @required this.onPressed,
+  });
+
+  final String text;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40.0,
+      width: 40.0,
+      child: RaisedButton(
+        child: RotatedBox(quarterTurns: 1, child: Text(text,style: TextStyle(color: Colors.white, fontSize: 12.0),)),
+        color: Colors.blue,
+        colorBrightness: Brightness.dark,
+        // shape: CircleBorder(),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
+class CircleButton extends StatelessWidget {
+  CircleButton({
+    @required this.text,
+    @required this.onPressed,
+  });
+
+  final String text;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 40.0,
+      width: 40.0,
+      child: RaisedButton(
+        child: RotatedBox(quarterTurns: 1, child: Text(text,style: TextStyle(color: Colors.white, fontSize: 12.0),)),
+        color: Colors.blue,
+        colorBrightness: Brightness.dark,
+        // shape: CircleBorder(),
+        onPressed: onPressed,
+      ),
+    );
+  }
+}
+
+class CircleInput extends StatelessWidget {
+  final String hintText;
+
+  const CircleInput({Key key, this.hintText}) : super(key: key);
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: 20.0, vertical: 0),
+      decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.1),
+          borderRadius: BorderRadius.all(Radius.circular(5.0))),
+      child: Row(children: <Widget>[
+
+        Padding(
+          padding: EdgeInsets.only(left: 20.0, right: 10.0),
+          child: Icon(Icons.search),
+        ),
+        Expanded(
+          child: TextFormField(
+            keyboardType: TextInputType.text,
+            textInputAction: TextInputAction.done,
+            cursorColor: Colors.black,
+            autofocus: false,
+            // style: TextField_Style,
+            decoration: InputDecoration(
+                filled: true,
+                fillColor: Colors.transparent,
+                contentPadding: EdgeInsets.all(11.5),
+                hintText: hintText,
+                border: InputBorder.none,
+                disabledBorder: OutlineInputBorder(
+                  borderSide:
+                  new BorderSide(color: Colors.transparent),
+                  borderRadius: new BorderRadius.circular(2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide:
+                  new BorderSide(color: Colors.transparent),
+                  borderRadius: new BorderRadius.circular(2),
+                )),
+          ),
+        )
+      ]),
+    );
   }
 }
